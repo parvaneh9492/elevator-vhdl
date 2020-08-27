@@ -1,0 +1,76 @@
+﻿library IEEE;
+use ieee.std_logic_1164.all;
+
+test_bench;
+
+entity elevator is
+   port(clock, reset, call0, call1, call2, Top, middle_plus, middle_minus, bottom: in std_logic;
+        direction, enable, indicator0 indicator1 indicator2: out std_logic);
+end entity elevator;
+
+ architecture behavioral of elevator is
+
+ signal reset: std_logic;
+ signal clock: std_logic:='0';
+ clock <= not clock after 10ns;
+ signal direction: std_logic;
+ signal enable: std_logic;
+ signal call0, call1, call2: std_logic;
+ signal top, middle_plus, middle_minus, bottom: std_logic;
+ signal indicator0, indicator1, indicator2: std_logic;
+ signal present_state, next_state: std_logic;
+
+ type state_type is (at0, at1, at2, to1, to2, downto0, downto1);
+begin
+
+seq: process(clock,enable,reset) is
+
+   begin
+     if(reset='1')
+       if(rising_edge(clock)) then
+         enable='1';
+   end if; 
+       end if;
+   end process seq;
+
+
+com: process(direction, call0, call1, call2, indicator0, indicator1, indicator2, top, middle_plus, middle_minus, bottom) is
+         if(direction='1') {
+             if(call1='1')     {
+               next_state <= to1;
+                 if(middle_plus='1')
+                   indicator1='1';
+                   present_state <= at1;
+                             } else if(call2='1') {
+                     next_state <= to2;
+                        if(top='1')
+                          indicator2='1';
+                          present_state <= at2;
+                                                  }
+                          }
+
+     else if(direction='0') {
+                      if(call0='1') {
+                         if(bottom='1')
+                            next_state <= downto0;
+                              indicator0='1';
+                              present_state <= at0;
+                                    }   else if(call1='1') {
+                                            if(middle_minus='1')
+                                               nexe_state <= downto1;
+                                                  indicator1='1';
+                                                   present_state <= at1;
+                                    }
+                            }
+                             
+
+                         
+
+        
+  
+     
+
+
+
+
+
